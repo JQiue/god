@@ -2,10 +2,13 @@ use std::env::temp_dir;
 use std::fs::File;
 use std::io::Write;
 
+use activity::preview;
+
 pub fn run() {
-  println!("tray");
   let mut app = systray::Application::new().expect("Can't create window!");
-  // w.set_tooltip(&"Whatever".to_string());
+  app
+    .set_tooltip("God watches you")
+    .expect("Failed to set tooltip");
   let temp_dir = temp_dir();
   let ico_path: std::path::PathBuf = temp_dir.join("trayicon.ico");
   let ico_data = include_bytes!("./favicon.ico");
@@ -18,22 +21,12 @@ pub fn run() {
     .expect("error");
 
   app
-    .add_menu_item("Print a thing", |_| {
-      println!("Printing a thing!");
+    .add_menu_item("预览", |_| {
+      preview();
       Ok::<_, systray::Error>(())
     })
     .expect("add menu item error");
 
-  app
-    .add_menu_item("Add Menu Item", |window| {
-      window.add_menu_item("Interior item", |_| {
-        println!("what");
-        Ok::<_, systray::Error>(())
-      })?;
-      window.add_menu_separator()?;
-      Ok::<_, systray::Error>(())
-    })
-    .expect("add menu item error");
   app.add_menu_separator().expect("add menu separator error");
 
   app
