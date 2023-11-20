@@ -1,5 +1,5 @@
+#![windows_subsystem = "windows"]
 use std::thread::spawn;
-
 use storage::create_table;
 
 fn main() {
