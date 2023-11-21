@@ -87,3 +87,18 @@ pub fn get_keyboard() -> Vec<(String, i32)> {
   }
   return data;
 }
+
+pub fn get_mouse() -> Vec<(String, i32)> {
+  let conn = get_conn();
+  let mut stmt = conn
+    .prepare("SELECT name, COUNT(name) as count FROM mouse GROUP BY name ORDER BY count DESC")
+    .expect("error");
+  let rows = stmt
+    .query_map([], |row| Ok((row.get(0)?, row.get(1)?)))
+    .expect("error");
+  let mut data: Vec<(String, i32)> = vec![];
+  for row in rows {
+    data.push(row.expect("error"));
+  }
+  return data;
+}

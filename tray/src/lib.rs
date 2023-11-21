@@ -1,6 +1,7 @@
 use std::env::temp_dir;
 use std::fs::File;
 use std::io::Write;
+use std::process::exit;
 
 use activity::preview;
 
@@ -30,8 +31,8 @@ pub fn run() {
   app.add_menu_separator().expect("add menu separator error");
 
   app
-    .add_menu_item("退出", |window| {
-      window.quit();
+    .add_menu_item("退出", |_| {
+      exit(0);
       Ok::<_, systray::Error>(())
     })
     .expect("add menu item error");
