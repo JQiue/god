@@ -3,14 +3,17 @@ name = "god"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+inputbot = "0.6.0"
+webbrowser = "0.8.12"
+rusqlite = { version = "0.30.0", features = ["bundled"] }
+chrono = "0.4.31"
+dirs = "5.0.1"
+systray = "0.4.0"
 
-storage = { path = "./storage" }
-tray = { path = "./tray" }
-input-watcher = { path = "./input-watcher" }
-
-[workspace]
-members = ["tray", "storage", "input-watcher", "activity"]
-resolver = "2"
+[profile.release]
+# lto = true
+# opt-level = "z"
+# codegen-units = 1
+# panic = "abort"
+# strip = true      # 自动从二进制中剥离符号

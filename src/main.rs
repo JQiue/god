@@ -1,10 +1,14 @@
 #![windows_subsystem = "windows"]
 use std::thread::spawn;
-use storage::create_table;
+
+mod activity;
+mod input_watcher;
+mod storage;
+mod tray;
 
 fn main() {
-  create_table();
-  spawn(|| tray::run());
-  let windows_handle = spawn(|| input_watcher::run());
+  storage::storage::create_table();
+  spawn(|| tray::tray::run());
+  let windows_handle = spawn(|| input_watcher::input_watcher::run());
   windows_handle.join().unwrap();
 }

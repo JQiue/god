@@ -3,14 +3,6 @@
 version = 3
 
 [[package]]
-name = "activity"
-version = "0.1.0"
-dependencies = [
- "storage",
- "webbrowser",
-]
-
-[[package]]
 name = "ahash"
 version = "0.8.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -586,9 +578,12 @@ dependencies = [
 name = "god"
 version = "0.1.0"
 dependencies = [
- "input-watcher",
- "storage",
- "tray",
+ "chrono",
+ "dirs",
+ "inputbot",
+ "rusqlite",
+ "systray",
+ "webbrowser",
 ]
 
 [[package]]
@@ -741,14 +736,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "05f6c2a17e8aba7217660e32863af87b0febad811d4b8620ef76b386603fddc2"
 dependencies = [
  "libc",
-]
-
-[[package]]
-name = "input-watcher"
-version = "0.1.0"
-dependencies = [
- "inputbot",
- "storage",
 ]
 
 [[package]]
@@ -1193,15 +1180,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4dccd0940a2dcdf68d092b8cbab7dc0ad8fa938bf95787e1b916b0e3d0e8e970"
 
 [[package]]
-name = "storage"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "dirs",
- "rusqlite",
-]
-
-[[package]]
 name = "strsim"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1306,14 +1284,6 @@ name = "tinyvec_macros"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
-
-[[package]]
-name = "tray"
-version = "0.1.0"
-dependencies = [
- "activity",
- "systray",
-]
 
 [[package]]
 name = "udev"
