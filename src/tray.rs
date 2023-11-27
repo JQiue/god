@@ -34,6 +34,7 @@ pub mod tray {
     app
       .add_menu_item("退出", |_| {
         exit(0);
+        #[allow(unreachable_code)]
         Ok::<_, systray::Error>(())
       })
       .expect("add menu item error");

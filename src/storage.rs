@@ -114,6 +114,60 @@ pub mod storage {
     return data;
   }
 
+  pub fn get_keyboard2() -> Vec<i32> {
+    let today = Local::now().format("%Y");
+    let mut date_array: [String; 12] = Default::default();
+    for v in 1..=12 {
+      let month = if v < 10 {
+        "0".to_string() + &v.to_string()
+      } else {
+        (v).to_string()
+      };
+      date_array[v - 1] = format!("{}-{}", today, month);
+    }
+
+    let conn = get_conn();
+    let mut stmt = conn
+      .prepare(
+        "SELECT months.month, COALESCE(data.count, 0) AS count
+              FROM (
+                  SELECT ? AS month
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+              ) AS months
+              LEFT JOIN (
+                  SELECT COUNT(*) as count, STRFTIME('%Y-%m', created_at) as month
+                  FROM keyboard
+                  WHERE created_at >= '2023' AND created_at < '2024'
+                  GROUP BY month
+              ) AS data ON months.month = data.month
+              ORDER BY months.month",
+      )
+      .expect("error");
+
+    let rows = stmt
+      .query_map(date_array, |row| {
+        // println!("{:?}", Ok((row.get(0)?, row.get(1))));
+        Ok(row.get(1)?)
+      })
+      .expect("error");
+
+    let mut data: Vec<i32> = vec![];
+    for row in rows {
+      data.push(row.expect("error"));
+    }
+    return data;
+  }
+
   pub fn get_mouse() -> Vec<(String, i32)> {
     let conn = get_conn();
     let mut stmt = conn
@@ -146,6 +200,60 @@ pub mod storage {
       .query_map([start_of_week_fmt, end_of_week_fmt], |row| {
         // println!("{:?}", Ok((row.get(0)?, row.get(1))));
         Ok(row.get(0)?)
+      })
+      .expect("error");
+
+    let mut data: Vec<i32> = vec![];
+    for row in rows {
+      data.push(row.expect("error"));
+    }
+    return data;
+  }
+
+  pub fn get_mouse2() -> Vec<i32> {
+    let today = Local::now().format("%Y");
+    let mut date_array: [String; 12] = Default::default();
+    for v in 1..=12 {
+      let month = if v < 10 {
+        "0".to_string() + &v.to_string()
+      } else {
+        (v).to_string()
+      };
+      date_array[v - 1] = format!("{}-{}", today, month);
+    }
+
+    let conn = get_conn();
+    let mut stmt = conn
+      .prepare(
+        "SELECT months.month, COALESCE(data.count, 0) AS count
+              FROM (
+                  SELECT ? AS month
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+                  UNION SELECT ?
+              ) AS months
+              LEFT JOIN (
+                  SELECT COUNT(*) as count, STRFTIME('%Y-%m', created_at) as month
+                  FROM mouse
+                  WHERE created_at >= '2023' AND created_at < '2024'
+                  GROUP BY month
+              ) AS data ON months.month = data.month
+              ORDER BY months.month",
+      )
+      .expect("error");
+
+    let rows = stmt
+      .query_map(date_array, |row| {
+        // println!("{:?}", Ok((row.get(0)?, row.get(1))));
+        Ok(row.get(1)?)
       })
       .expect("error");
 
