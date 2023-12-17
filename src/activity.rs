@@ -14,7 +14,10 @@ pub mod activity {
     let mouse1_data = get_mouse1();
     let mouse2_data = get_mouse2();
     let temp_dir = temp_dir();
-    let html_path: std::path::PathBuf = temp_dir.join("index.html");
+    // 输出 HTML 路径
+    let out_html_path = temp_dir.join("index.html");
+    let out_js_path = temp_dir.join("index.js");
+    let js_content = include_str!("./asserts/index.js");
     let content = format!(
       r#"
   <!DOCTYPE html>
@@ -23,23 +26,28 @@ pub mod activity {
 <head>
   <title>God</title>
   <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.js"></script>
+  <script src="./index.js"></script>
 </head>
 
 <body style="height: 100%;">
-  <div id="keyboard" style="height: 100%;"></div>
-  <div id="keyboard1" style="height: 100%;"></div>
-  <div id="keyboard2" style="height: 100%;"></div>
-  <div id="mouse" style="height: 100%;"></div>
-  <div id="mouse1" style="height: 100%;"></div>
-  <div id="mouse2" style="height: 100%;"></div>
+  <div id="keyboard" style="height: 50vh;"></div>
+  <div style="display: flex;">
+    <div id="keyboard1" style="display: inline-block; width: 50%;height: 50vh;"></div>
+    <div id="keyboard2" style="display: inline-block; width: 50%;height: 50vh;"></div>
+  </div>
+  <div style="display: flex;">
+    <div id="mouse" style="display: inline-block; width: 50%;height: 50vh;"></div>
+    <div id="mouse1" style="display: inline-block; width: 50%;height: 50vh;"></div>
+    <div id="mouse2" style="display: inline-block; width: 50%;height: 50vh;"></div>
+  </div>
 
   <script>
-    const keyboardChart = echarts.init(document.getElementById('keyboard'));
-    const keyboard1Chart = echarts.init(document.getElementById('keyboard1'));
-    const keyboard2Chart = echarts.init(document.getElementById('keyboard2'));
-    const mouseChart = echarts.init(document.getElementById('mouse'));
-    const mouse1Chart = echarts.init(document.getElementById('mouse1'));
-    const mouse2Chart = echarts.init(document.getElementById('mouse2'));
+    const keyboardChart = echarts.init(document.getElementById('keyboard'), 'wonderland');
+    const keyboard1Chart = echarts.init(document.getElementById('keyboard1'), 'wonderland');
+    const keyboard2Chart = echarts.init(document.getElementById('keyboard2'), 'wonderland');
+    const mouseChart = echarts.init(document.getElementById('mouse'), 'wonderland');
+    const mouse1Chart = echarts.init(document.getElementById('mouse1'), 'wonderland');
+    const mouse2Chart = echarts.init(document.getElementById('mouse2'), 'wonderland');
 
     const keyboardChartOption = {{
       title: {{
@@ -69,7 +77,7 @@ pub mod activity {
 
     const keyboard1ChartOption = {{
       title: {{
-        text: "本周每日按键次数",
+        text: "本周按键次数",
         left: "center"
       }},
       tooltip: {{
@@ -147,7 +155,7 @@ pub mod activity {
 
     const mouse1ChartOption = {{
       title: {{
-        text: "本周每日点击次数",
+        text: "本周点击次数",
         left: "center"
       }},
       tooltip: {{
@@ -223,12 +231,18 @@ pub mod activity {
       mouse2_data
     );
 
-    let mut file = File::create(&html_path).unwrap();
-    file
+    let mut html_file = File::create(&out_html_path).unwrap();
+    html_file
       .write_all(content.as_bytes())
       .expect("Failed to write to file");
-    drop(file);
+    let mut js_file = File::create(&out_js_path).unwrap();
+    js_file
+      .write_all(js_content.as_bytes())
+      .expect("Failed to write to file");
 
-    open(html_path.to_str().expect("error")).expect("error")
+    drop(html_file);
+    drop(js_file);
+
+    open(out_html_path.to_str().expect("error")).expect("error")
   }
 }

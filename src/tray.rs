@@ -13,7 +13,7 @@ pub mod tray {
       .expect("Failed to set tooltip");
     let temp_dir = temp_dir();
     let ico_path: std::path::PathBuf = temp_dir.join("trayicon.ico");
-    let ico_data = include_bytes!("./favicon.ico");
+    let ico_data = include_bytes!("./asserts/favicon.ico");
     let mut file = File::create(&ico_path).unwrap();
     file.write_all(ico_data).expect("Failed to write to file");
     drop(file);
