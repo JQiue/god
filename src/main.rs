@@ -1,6 +1,5 @@
-#![windows_subsystem = "windows"]
+// #![windows_subsystem = "windows"]
 use std::thread::spawn;
-
 mod activity;
 mod input_watcher;
 mod storage;
